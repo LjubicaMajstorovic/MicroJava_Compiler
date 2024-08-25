@@ -1,0 +1,52 @@
+package rs.ac.bg.etf.pp1;
+
+import java_cup.runtime.*;
+import org.apache.log4j.*;
+import rs.ac.bg.etf.pp1.ast.*;
+
+parser code {:
+	private Logger log = Logger.getLogger(getClass());
+	public boolean errorDetected = false;
+	
+    public void report_error(String message, Object info) {
+    	errorDetected = true;
+		int line = 0;
+		
+		if (info instanceof Symbol) line = ((Symbol)info).left; 
+		else if (info instanceof Integer) line = (int)info;
+		
+		if (line == 0) log.error(message);
+		else log.error(message + " (linija " + line + ")");
+    }
+    
+    public void syntax_error(Symbol cur_token) {
+        report_error("Sintaksna greska", cur_token);
+    }
+     
+    public void unrecovered_syntax_error(Symbol cur_token) throws java.lang.Exception {
+        report_fatal_error("Fatalna greska, parsiranje ne moze da se nastavi", cur_token);
+    }
+    
+    public void report_fatal_error(String message, Object info) throws java.lang.Exception {
+      done_parsing();
+      report_error(message, info);
+    }
+:}
+
+scan with {:
+	Symbol s = this.getScanner().next_token();
+	if (s != null && s.value != null) {
+		log.info(s + " " + s.value.toString());
+	} else if (s != null) {
+		log.info(s);
+	}
+	return s;
+:}
+
+terminal PROGRAM, BREAK, CONST, ELSE, IF, NEW, PRINT, READ, RETURN, VOID, CONTINUE, FOR;
+terminal PLUS, MINUS, ASTERISK, DIVIDE, MODULO, DBL_EQUAL, NOT_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, AND, OR, EQUAL, INC, DEC, SEMI, COLON, COMMA, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
+terminal NUM, BOOL, CHAR, IDENT;
+
+nonterminal Program;
+
+Program ::= PROGRAM;

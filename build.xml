@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MJCompiler" default="compile" basedir=".">
+	<target name="delete">
+		<delete dir="bin" />
+		<delete file="src/rs/ac/bg/etf/pp1/sym.java" />
+		<delete file="src/rs/ac/bg/etf/pp1/MJParser.java" />
+		<delete file="src/rs/ac/bg/etf/pp1/Yylex.java" />
+		<delete dir="src/rs/ac/bg/etf/pp1/ast" />
+		<delete file="spec/mjparser_astbuild.cup" />
+	</target>
+
+	<target name="lexerGen" depends="delete">
+		<java jar="lib/JFlex.jar" fork="true" failonerror="true">
+			<arg value="-d" />
+			<arg value="src/rs/ac/bg/etf/pp1" />
+			<arg value="spec/mjlexer.flex" />
+		</java>
+	</target>
+
+	<target name="parserGen" depends="lexerGen">
+		<java jar="lib/cup_v10k.jar" fork="true" dir="src" failonerror="true">
+			<arg value="-destdir" />
+			<arg value="rs/ac/bg/etf/pp1" />
+			<arg value="-ast" />
+			<arg value="rs.ac.bg.etf.pp1.ast" />
+			<arg value="-parser" />
+			<arg value="MJParser" />
+			<arg value="-buildtree" />
+			<arg value="../spec/mjparser.cup" />
+		</java>
+	</target>
+
+	<target name="compile" depends="lexerGen,parserGen">
+		<mkdir dir="bin" />
+		<javac destdir="bin" debug="true" includeantruntime="false">
+			<src path="tests/rs/ac/bg/etf/pp1" />
+			<src path="src/rs/ac/bg/etf/pp1" />
+			<classpath>
+				<pathelement path="lib/log4j-1.2.17.jar" />
+				<pathelement path="lib/JFlex.jar" />
+				<pathelement path="lib/cup_v10k.jar" />
+			</classpath>
+		</javac>
+	</target>
+</project>
