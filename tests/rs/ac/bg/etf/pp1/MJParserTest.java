@@ -11,7 +11,9 @@ import java_cup.runtime.Symbol;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
-import rs.ac.bg.etf.pp1.ast.Program;
+import rs.ac.bg.etf.pp1.parser.generated.ast.Program;
+import rs.ac.bg.etf.pp1.lexer.generated.Yylex;
+import rs.ac.bg.etf.pp1.parser.generated.Parser;
 import rs.ac.bg.etf.pp1.util.Log4JUtils;
 
 public class MJParserTest {
@@ -33,7 +35,7 @@ public class MJParserTest {
 			br = new BufferedReader(new FileReader(sourceCode));
 			Yylex lexer = new Yylex(br);
 
-			MJParser p = new MJParser(lexer);
+			Parser p = new Parser(lexer);
 			Symbol s = p.parse();
 
 			Program prog = (Program) (s.value);

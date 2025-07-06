@@ -1,8 +1,8 @@
-package rs.ac.bg.etf.pp1;
+package rs.ac.bg.etf.pp1.parser.generated;
 
 import java_cup.runtime.*;
 import org.apache.log4j.*;
-import rs.ac.bg.etf.pp1.ast.*;
+import rs.ac.bg.etf.pp1.parser.generated.ast.*;
 
 parser code {:
 	private Logger log = Logger.getLogger(getClass());

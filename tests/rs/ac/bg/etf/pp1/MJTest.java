@@ -11,6 +11,8 @@ import java_cup.runtime.Symbol;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
+import rs.ac.bg.etf.pp1.lexer.generated.Yylex;
+import rs.ac.bg.etf.pp1.parser.generated.sym;
 import rs.ac.bg.etf.pp1.util.Log4JUtils;
 
 public class MJTest {
@@ -31,10 +33,10 @@ public class MJTest {
 			br = new BufferedReader(new FileReader(sourceCode));
 			
 			Yylex lexer = new Yylex(br);
-			Symbol currToken = null;
+			Symbol currToken;
 			while ((currToken = lexer.next_token()).sym != sym.EOF) {
-				if (currToken != null && currToken.value != null) {
-					log.info(currToken + " " + currToken.value.toString());
+				if (currToken.value != null) {
+					log.info(currToken + " " + currToken.value);
 				}
 			}
 		} 

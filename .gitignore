@@ -1,8 +1,6 @@
+/.idea/workspace.xml
 /bin/
-/spec/mjparser_astbuild.cup
-/src/rs/ac/bg/etf/pp1/ast/
-/src/rs/ac/bg/etf/pp1/Yylex.java
-/src/rs/ac/bg/etf/pp1/sym.java
-/src/rs/ac/bg/etf/pp1/MJParser.java
 /logs/
-/lib/
+/out/
+/src/rs/ac/bg/etf/pp1/lexer/generated/
+/src/rs/ac/bg/etf/pp1/parser/generated/

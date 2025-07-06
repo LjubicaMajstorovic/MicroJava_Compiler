@@ -1,5 +1,6 @@
-package rs.ac.bg.etf.pp1;
+package rs.ac.bg.etf.pp1.lexer.generated;
 
+import rs.ac.bg.etf.pp1.parser.generated.sym;
 import java_cup.runtime.Symbol;
 import org.apache.log4j.*;
 
@@ -16,6 +17,9 @@ import org.apache.log4j.*;
 		return new Symbol(type, yyline + 1, yycolumn, value);
 	}
 %}
+
+%public
+%class Yylex
 
 %cup
 %line
