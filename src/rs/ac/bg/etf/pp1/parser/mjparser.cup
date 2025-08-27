@@ -49,7 +49,7 @@ terminal Integer NUM, BOOL;
 terminal Character CHAR;
 terminal String IDENT;
 
-nonterminal Program, DeclarationListConNVar, DeclarationListMethods, DeclarationListCon, DeclarationListVar, ConstVal, DeclareConst, DeclareListCon, Type;
+nonterminal Program, DeclarationListConNVar, DeclarationListMethods, DeclarationListCon, DeclarationListVar, ConstVal, DeclareConst, DeclareListCon, Type, DeclareVar, DeclareListVar;
 
 Program ::= (Program) PROGRAM IDENT DeclarationListConNVar LBRACE DeclarationListMethods RBRACE;
 DeclarationListConNVar ::= (DeclarationListConNVarC) DeclarationListConNVar DeclarationListCon
@@ -57,9 +57,23 @@ DeclarationListConNVar ::= (DeclarationListConNVarC) DeclarationListConNVar Decl
                            (DeclarationListConNVarV) DeclarationListConNVar DeclarationListVar
                            |
                            (EpsilonDC) /* epsilon */;
+
 DeclarationListCon ::= (DeclarationListCon) CONST Type DeclareConst DeclareListCon SEMI;
 DeclareConst ::= (DeclareConst) IDENT ASSIGN ConstVal;
 DeclareListCon ::= (DeclareListConAdd) COMMA DeclareConst DeclareListCon
                    |
-                   (EpsilonDCL) /* epsilon */ ;
+                   (EpsilonDLC) /* epsilon */ ;
+ConstVal ::= (Number) NUM
+             |
+             (Boolean) BOOL
+             |
+             (Character) CHAR;
+
+DeclarationListVar ::= (DeclarationListVar) Type DeclareVar DeclareListVar SEMI;
+DeclareVar ::= (Var) IDENT
+               |
+               (Arr) IDENT RBRACKET LBRACKET;
+DeclareListVar ::= (DeclareListVarAdd) COMMA DeclareVar DeclareListVar
+                   |
+                   (EpsilonDLV) /* epsilon */ ;
 Type ::= (Type) IDENT;
