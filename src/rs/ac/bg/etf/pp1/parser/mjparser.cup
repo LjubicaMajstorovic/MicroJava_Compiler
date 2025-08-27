@@ -43,10 +43,23 @@ scan with {:
 	return s;
 :}
 
-terminal PROGRAM, BREAK, CONST, ELSE, IF, NEW, PRINT, READ, RETURN, VOID, CONTINUE, FOR;
+terminal PROGRAM, BREAK, CONST, ELSE, IF, NEW, PRINT, READ, RETURN, VOID, CONTINUE, FOR, DO, WHILE, MAP, ASSIGN;
 terminal PLUS, MINUS, ASTERISK, DIVIDE, MODULO, DBL_EQUAL, NOT_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, AND, OR, EQUAL, INC, DEC, SEMI, COLON, COMMA, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
-terminal NUM, BOOL, CHAR, IDENT;
+terminal Integer NUM, BOOL;
+terminal Character CHAR;
+terminal String IDENT;
 
-nonterminal Program;
+nonterminal Program, DeclarationListConNVar, DeclarationListMethods, DeclarationListCon, DeclarationListVar, ConstVal, DeclareConst, DeclareListCon, Type;
 
-Program ::= PROGRAM;
+Program ::= (Program) PROGRAM IDENT DeclarationListConNVar LBRACE DeclarationListMethods RBRACE;
+DeclarationListConNVar ::= (DeclarationListConNVarC) DeclarationListConNVar DeclarationListCon
+                           |
+                           (DeclarationListConNVarV) DeclarationListConNVar DeclarationListVar
+                           |
+                           (EpsilonDC) /* epsilon */;
+DeclarationListCon ::= (DeclarationListCon) CONST Type DeclareConst DeclareListCon SEMI;
+DeclareConst ::= (DeclareConst) IDENT ASSIGN ConstVal;
+DeclareListCon ::= (DeclareListConAdd) COMMA DeclareConst DeclareListCon
+                   |
+                   (EpsilonDCL) /* epsilon */ ;
+Type ::= (Type) IDENT;

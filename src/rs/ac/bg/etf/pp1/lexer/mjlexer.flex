@@ -77,6 +77,9 @@ import org.apache.log4j.*;
 "void"      { return new_symbol(sym.VOID, yytext()); }
 "continue"  { return new_symbol(sym.CONTINUE, yytext()); }
 "for"       { return new_symbol(sym.FOR, yytext()); }
+"do"		{ return new_symbol(sym.DO, yytext()); }
+"while"		{ return new_symbol(sym.WHILE, yytext()); }
+"map"       { return new_symbol(sym.WHILE, yytext()); }
 
 <YYINITIAL> "//"  { yybegin(COMMENT); }
 <COMMENT> .       { yybegin(COMMENT); }
