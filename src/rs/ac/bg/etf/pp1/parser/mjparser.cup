@@ -50,6 +50,7 @@ terminal Character CHAR;
 terminal String IDENT;
 
 nonterminal Program, DeclarationListConNVar, DeclarationListMethods, DeclarationListCon, DeclarationListVar, ConstVal, DeclareConst, DeclareListCon, Type, DeclareVar, DeclareListVar;
+nonterminal ReturnType, ArgumentsAndVarDecl, ListStatements, MethodDeclaration, ArgumentsList, Argument, ArgumentAdd;
 
 Program ::= (Program) PROGRAM IDENT DeclarationListConNVar LBRACE DeclarationListMethods RBRACE;
 DeclarationListConNVar ::= (DeclarationListConNVarC) DeclarationListConNVar DeclarationListCon
@@ -77,3 +78,21 @@ DeclareListVar ::= (DeclareListVarAdd) COMMA DeclareVar DeclareListVar
                    |
                    (EpsilonDLV) /* epsilon */ ;
 Type ::= (Type) IDENT;
+
+DeclarationListMethods ::= (DeclarationListMethodsAdd) DeclarationListMethods MethodDeclaration
+                           |
+                           (EpsilonDLM) /* epsilon */;
+MethodDeclaration ::= (MethodDeclaration) ReturnType IDENT ArgumentsAndVarDecl LBRACE ListStatements RBRACE;
+ReturnType ::= (NonVoid) Type
+               |
+               (Void) VOID;
+ArgumentsAndVarDecl ::= (ArgumentsAndVarDecl) LPAREN ArgumentsList RPAREN DeclarationListVar;
+ArgumentsList ::= (ArgumentsListAdd) Argument ArgumentAdd
+                  |
+                  (EpsilonAL) /* epsilon */;
+ArgumentAdd ::= (ArgumentAdd) COMMA Argument ArgumentAdd
+                |
+                (EpsilonAA) /* epsilon */;
+Argument ::= (ArgumentVar) Type IDENT
+             |
+             (ArgumentArr) Type IDENT LBRACKET RBRACKET;
