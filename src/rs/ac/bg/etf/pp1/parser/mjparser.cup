@@ -50,7 +50,9 @@ terminal Character CHAR;
 terminal String IDENT;
 
 nonterminal Program, DeclarationListConNVar, DeclarationListMethods, DeclarationListCon, DeclarationListVar, ConstVal, DeclareConst, DeclareListCon, Type, DeclareVar, DeclareListVar;
-nonterminal ReturnType, ArgumentsAndVarDecl, ListStatements, MethodDeclaration, ArgumentsList, Argument, ArgumentAdd;
+nonterminal ReturnType, ArgumentsAndVarDecl, ListStatements, MethodDeclaration, ArgumentsList, Argument, ArgumentAdd, Statement;
+nonterminal DesignatorStatment, Condition, ElseStatement, Expr, PrintExpr, ListStatments, DoWhileCondition, Designator, AssignOp, RealArgs, SetOp;
+nonterminal Term, Unary, Factor, MulOp, AddOp, FactorTrue;
 
 Program ::= (Program) PROGRAM IDENT DeclarationListConNVar LBRACE DeclarationListMethods RBRACE;
 DeclarationListConNVar ::= (DeclarationListConNVarC) DeclarationListConNVar DeclarationListCon
@@ -64,16 +66,16 @@ DeclareConst ::= (DeclareConst) IDENT ASSIGN ConstVal;
 DeclareListCon ::= (DeclareListConAdd) COMMA DeclareConst DeclareListCon
                    |
                    (EpsilonDLC) /* epsilon */ ;
-ConstVal ::= (Number) NUM
+ConstVal ::= (Number1) NUM
              |
-             (Boolean) BOOL
+             (Boolean1) BOOL
              |
-             (Character) CHAR;
+             (Character1) CHAR;
 
 DeclarationListVar ::= (DeclarationListVar) Type DeclareVar DeclareListVar SEMI;
 DeclareVar ::= (Var) IDENT
                |
-               (Arr) IDENT RBRACKET LBRACKET;
+               (Arr) IDENT LBRACKET RBRACKET;
 DeclareListVar ::= (DeclareListVarAdd) COMMA DeclareVar DeclareListVar
                    |
                    (EpsilonDLV) /* epsilon */ ;
@@ -85,14 +87,80 @@ DeclarationListMethods ::= (DeclarationListMethodsAdd) DeclarationListMethods Me
 MethodDeclaration ::= (MethodDeclaration) ReturnType IDENT ArgumentsAndVarDecl LBRACE ListStatements RBRACE;
 ReturnType ::= (NonVoid) Type
                |
-               (Void) VOID;
+               (Void1) VOID;
 ArgumentsAndVarDecl ::= (ArgumentsAndVarDecl) LPAREN ArgumentsList RPAREN DeclarationListVar;
 ArgumentsList ::= (ArgumentsListAdd) Argument ArgumentAdd
                   |
                   (EpsilonAL) /* epsilon */;
-ArgumentAdd ::= (ArgumentAdd) COMMA Argument ArgumentAdd
+ArgumentAdd ::= (ArgumentAdd1) COMMA Argument ArgumentAdd
                 |
                 (EpsilonAA) /* epsilon */;
 Argument ::= (ArgumentVar) Type IDENT
              |
              (ArgumentArr) Type IDENT LBRACKET RBRACKET;
+
+ListStatements ::= (ListStatementsAdd) ListStatements Statement
+                   |
+                   (EpsilonLSA) /* epsilon */;
+Statement ::= (StatmentDESIG) DesignatorStatment SEMI
+              |
+              (StatementIF) IF LPAREN Condition RPAREN Statement ElseStatement
+              |
+              (StatementB) BREAK SEMI
+              |
+              (StatementC) CONTINUE SEMI
+              |
+              (StatementRV) RETURN SEMI
+              |
+              (StatementRNV) RETURN Expr SEMI
+              |
+              (StetementR) READ LPAREN Designator RPAREN SEMI
+              |
+              (StatementP) PRINT LPAREN PrintExpr RPAREN SEMI
+              |
+              (StatementDO) DO Statement WHILE LPAREN DoWhileCondition RPAREN SEMI
+              |
+              (Statements) LBRACE ListStatments RBRACE;
+
+DesignatorStatment ::= (Assign) Designator AssignOp Expr
+                       |
+                       (MethodCall) Designator LPAREN RealArgs RPAREN
+                       |
+                       (Inc) Designator INC
+                       |
+                       (Dec) Designator DEC
+                       |
+                       (SetOperation) Designator AssignOp Designator SetOp Designator;
+Designator ::= (Variable) IDENT
+               |
+               (ArrayElem) IDENT LBRACKET Expr RBRACKET;
+AssignOp ::= (AssignOp) ASSIGN;
+
+Expr ::= (ExprList) Expr AddOp Term
+         |
+         (ExprT) Term;
+
+Term ::= (TermMulOp) Term MulOp Factor
+         |
+         (TermF) Factor;
+Factor ::= (Factor) Unary FactorTrue;
+
+Unary ::= (UnarySub) MINUS
+          |
+          (EpsilonU) /* epsilon */;
+
+FactorTrue ::= (FactorTrueDes) Designator
+                |
+				(FactorTrueMethod) Designator LPAREN RealArgs RPAREN
+		   		|
+		   		(FactorTrueNum) NUM
+		   		|
+		   		(FactorTrueChar) CHAR
+		   		|
+		   		(FactorTrueBool) BOOL
+		   		|
+		   		(FactorTrueNewArr) NEW Type LBRACKET Expr RBRACKET
+		   		|
+		   		(FactorTrueExpr) LPAREN Expr RPAREN
+		   		;
+
