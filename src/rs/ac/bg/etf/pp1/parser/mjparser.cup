@@ -43,8 +43,8 @@ scan with {:
 	return s;
 :}
 
-terminal PROGRAM, BREAK, CONST, ELSE, IF, NEW, PRINT, READ, RETURN, VOID, CONTINUE, FOR, DO, WHILE, MAP, ASSIGN;
-terminal PLUS, MINUS, ASTERISK, DIVIDE, MODULO, DBL_EQUAL, NOT_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, AND, OR, EQUAL, INC, DEC, SEMI, COLON, COMMA, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
+terminal PROGRAM, BREAK, CONST, ELSE, IF, NEW, PRINT, READ, RETURN, VOID, CONTINUE, FOR, DO, WHILE, MAP, ASSIGN, UNION;
+terminal PLUS, MINUS, ASTERISK, DIVIDE, MODULO, DBL_EQUAL, NOT_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, AND, OR, INC, DEC, SEMI, COLON, COMMA, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
 terminal Integer NUM, BOOL;
 terminal Character CHAR;
 terminal String IDENT;
@@ -52,7 +52,7 @@ terminal String IDENT;
 nonterminal Program, DeclarationListConNVar, DeclarationListMethods, DeclarationListCon, DeclarationListVar, ConstVal, DeclareConst, DeclareListCon, Type, DeclareVar, DeclareListVar;
 nonterminal ReturnType, ArgumentsAndVarDecl, ListStatements, MethodDeclaration, ArgumentsList, Argument, ArgumentAdd, Statement;
 nonterminal DesignatorStatment, Condition, ElseStatement, Expr, PrintExpr, DoWhileCondition, Designator, AssignOp, RealArgs, SetOp;
-nonterminal Term, Factor, MulOp, AddOp;
+nonterminal Term, Factor, MulOp, AddOp, RelOp;
 
 Program ::= (Program) PROGRAM IDENT DeclarationListConNVar LBRACE DeclarationListMethods RBRACE;
 DeclarationListConNVar ::= (DeclarationListConNVarC) DeclarationListConNVar DeclarationListCon
@@ -160,3 +160,24 @@ Factor ::= (FactorDes) Designator
         |
         (FactorExpr) LPAREN Expr RPAREN
         ;
+
+AddOp ::= (AddOpPlus) PLUS
+          |
+          (AddOpMinus) MINUS;
+
+MulOp ::= (MulOpMul) ASTERISK
+          |
+          (MulOpDiv) DIVIDE
+          |
+          (MulOpMod) MODULO;
+
+SetOp ::= (SetOpUnion) UNION;
+
+RelOp ::= (RelOpEquals) DBL_EQUAL
+          | (RelOpNotEquals) NOT_EQUAL
+          | (RelOpGreatern) GREATER
+          | (RelOpGreaterEqual) GREATER_EQUAL
+          | (RelOpLessThan) LESS
+          | (RelOpLessEqual) LESS_EQUAL;
+
+
