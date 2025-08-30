@@ -52,7 +52,7 @@ terminal String IDENT;
 nonterminal Program, DeclarationListConNVar, DeclarationListMethods, DeclarationListCon, DeclarationListVar, ConstVal, DeclareConst, DeclareListCon, Type, DeclareVar, DeclareListVar;
 nonterminal ReturnType, ArgumentsAndVarDecl, ListStatements, MethodDeclaration, ArgumentsList, Argument, ArgumentAdd, Statement;
 nonterminal DesignatorStatment, Condition, ElseStatement, Expr, PrintExpr, DoWhileCondition, Designator, AssignOp, RealArgs, SetOp;
-nonterminal Term, Factor, MulOp, AddOp, RelOp, RealArgsList, RealArg;
+nonterminal Term, Factor, MulOp, AddOp, RelOp, RealArgsList, RealArg, ConditionTerm, ConditionFact;
 
 Program ::= (Program) PROGRAM IDENT DeclarationListConNVar LBRACE DeclarationListMethods RBRACE;
 DeclarationListConNVar ::= (DeclarationListConNVarC) DeclarationListConNVar DeclarationListCon
@@ -188,6 +188,18 @@ RealArgsList::= (RealArgsListAdd) COMMA RealArg RealArgsList
                 |
                 (EpsilonRealArgsList) /* epsilon */;
 RealArg ::= Expr;
+
+Condition ::= (OneCondition) ConditionTerm
+              |
+              (MoreCondition) Condition OR ConditionTerm;
+
+ConditionTerm ::= (OneConditionFact) ConditionFact
+                  |
+                  (MoreConditionFacts) ConditionTerm AND ConditionFact;
+
+ConditionFact ::= (ConditionFactExpr) Expr
+                  |
+                  (ConditionFactRelOp) Expr RelOp Expr;
 
 
 
