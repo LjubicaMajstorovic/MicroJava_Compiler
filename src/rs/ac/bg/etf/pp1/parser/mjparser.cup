@@ -54,6 +54,8 @@ nonterminal ReturnType, ArgumentsAndVarDecl, ListStatements, MethodDeclaration, 
 nonterminal DesignatorStatment, Condition, ElseStatement, Expr, PrintExpr, DoWhileCondition, Designator, AssignOp, RealArgs, SetOp;
 nonterminal Term, Factor, MulOp, AddOp, RelOp, RealArgsList, RealArg, ConditionTerm, ConditionFact;
 
+precedence left ELSE;
+
 Program ::= (Program) PROGRAM IDENT DeclarationListConNVar LBRACE DeclarationListMethods RBRACE;
 DeclarationListConNVar ::= (DeclarationListConNVarC) DeclarationListConNVar DeclarationListCon
                            |
@@ -104,7 +106,7 @@ ListStatements ::= (ListStatementsAdd) ListStatements Statement
                    (EpsilonLSA) /* epsilon */;
 Statement ::= (StatmentDESIG) DesignatorStatment SEMI
               |
-              (StatementIF) IF LPAREN Condition RPAREN Statement ElseStatement
+              (StatementIf) IF LPAREN Condition RPAREN Statement ElseStatement
               |
               (StatementB) BREAK SEMI
               |
@@ -200,6 +202,11 @@ ConditionTerm ::= (OneConditionFact) ConditionFact
 ConditionFact ::= (ConditionFactExpr) Expr
                   |
                   (ConditionFactRelOp) Expr RelOp Expr;
+
+ElseStatement ::= (ElseStatments) ELSE Statement
+                  |
+                  (EpsilonElse) /* epsilon */;
+
 
 
 
