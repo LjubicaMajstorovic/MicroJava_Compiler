@@ -52,7 +52,7 @@ terminal String IDENT;
 nonterminal Program, DeclarationListConNVar, DeclarationListMethods, DeclarationListCon, DeclarationListVar, ConstVal, DeclareConst, DeclareListCon, Type, DeclareVar, DeclareListVar;
 nonterminal ReturnType, ArgumentsAndVarDecl, ListStatements, MethodDeclaration, ArgumentsList, Argument, ArgumentAdd, Statement;
 nonterminal DesignatorStatment, Condition, ElseStatement, Expr, PrintExpr, DoWhileCondition, Designator, AssignOp, RealArgs, SetOp;
-nonterminal Term, Factor, MulOp, AddOp, RelOp, RealArgsList, RealArg, ConditionTerm, ConditionFact;
+nonterminal Term, Factor, MulOp, AddOp, RelOp, RealArgsList, RealArg, ConditionTerm, ConditionFact, MultipleDeclarationListVar;
 
 precedence left ELSE;
 
@@ -90,7 +90,12 @@ MethodDeclaration ::= (MethodDeclaration) ReturnType IDENT ArgumentsAndVarDecl L
 ReturnType ::= (NonVoid) Type
                |
                (Void1) VOID;
-ArgumentsAndVarDecl ::= (ArgumentsAndVarDecl) LPAREN ArgumentsList RPAREN DeclarationListVar;
+ArgumentsAndVarDecl ::= (ArgumentsAndVarDecl) LPAREN ArgumentsList RPAREN MultipleDeclarationListVar;
+
+MultipleDeclarationListVar ::= (MulitipleDeclareVars) MultipleDeclarationListVar DeclarationListVar
+                               |
+                               (EpsilonMultipleDLV) /* epsilon */;
+
 ArgumentsList ::= (ArgumentsListAdd) Argument ArgumentAdd
                   |
                   (EpsilonAL) /* epsilon */;
@@ -184,7 +189,7 @@ RelOp ::= (RelOpEquals) DBL_EQUAL
           | (RelOpLessThan) LESS
           | (RelOpLessEqual) LESS_EQUAL;
 
-RealArgs ::= (RealArgsList) RealArg RealArgsList
+RealArgs ::= (RealArgsLists) RealArg RealArgsList
              |
              (EpsilonRealArgs) /* epsilon */;
 
