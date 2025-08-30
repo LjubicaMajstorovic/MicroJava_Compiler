@@ -51,8 +51,8 @@ terminal String IDENT;
 
 nonterminal Program, DeclarationListConNVar, DeclarationListMethods, DeclarationListCon, DeclarationListVar, ConstVal, DeclareConst, DeclareListCon, Type, DeclareVar, DeclareListVar;
 nonterminal ReturnType, ArgumentsAndVarDecl, ListStatements, MethodDeclaration, ArgumentsList, Argument, ArgumentAdd, Statement;
-nonterminal DesignatorStatment, Condition, ElseStatement, Expr, PrintExpr, ListStatments, DoWhileCondition, Designator, AssignOp, RealArgs, SetOp;
-nonterminal Term, Unary, Factor, MulOp, AddOp, FactorTrue;
+nonterminal DesignatorStatment, Condition, ElseStatement, Expr, PrintExpr, DoWhileCondition, Designator, AssignOp, RealArgs, SetOp;
+nonterminal Term, Unary, Factor, MulOp, AddOp, FactorTrue, FactorTrueTail;
 
 Program ::= (Program) PROGRAM IDENT DeclarationListConNVar LBRACE DeclarationListMethods RBRACE;
 DeclarationListConNVar ::= (DeclarationListConNVarC) DeclarationListConNVar DeclarationListCon
@@ -120,7 +120,7 @@ Statement ::= (StatmentDESIG) DesignatorStatment SEMI
               |
               (StatementDO) DO Statement WHILE LPAREN DoWhileCondition RPAREN SEMI
               |
-              (Statements) LBRACE ListStatments RBRACE;
+              (Statements) LBRACE ListStatements RBRACE;
 
 DesignatorStatment ::= (Assign) Designator AssignOp Expr
                        |
@@ -151,11 +151,11 @@ Unary ::= (UnarySub) MINUS
 
 FactorTrue ::= (FactorTrueDes) Designator
                 |
-				(FactorTrueMethod) Designator LPAREN RealArgs RPAREN
+			    (FactorTrueMethod) Designator LPAREN RealArgs RPAREN
 		   		|
-		   		(FactorTrueNum) NUM
+		   		(FactorTrueNumber) NUM
 		   		|
-		   		(FactorTrueChar) CHAR
+		   		(FactorTrueCharacter) CHAR
 		   		|
 		   		(FactorTrueBool) BOOL
 		   		|
@@ -163,4 +163,3 @@ FactorTrue ::= (FactorTrueDes) Designator
 		   		|
 		   		(FactorTrueExpr) LPAREN Expr RPAREN
 		   		;
-
