@@ -52,7 +52,7 @@ terminal String IDENT;
 nonterminal Program, DeclarationListConNVar, DeclarationListMethods, DeclarationListCon, DeclarationListVar, ConstVal, DeclareConst, DeclareListCon, Type, DeclareVar, DeclareListVar;
 nonterminal ReturnType, ArgumentsAndVarDecl, ListStatements, MethodDeclaration, ArgumentsList, Argument, ArgumentAdd, Statement;
 nonterminal DesignatorStatment, Condition, ElseStatement, Expr, PrintExpr, DoWhileCondition, Designator, AssignOp, RealArgs, SetOp;
-nonterminal Term, Unary, Factor, MulOp, AddOp, FactorTrue, FactorTrueTail;
+nonterminal Term, Factor, MulOp, AddOp;
 
 Program ::= (Program) PROGRAM IDENT DeclarationListConNVar LBRACE DeclarationListMethods RBRACE;
 DeclarationListConNVar ::= (DeclarationListConNVarC) DeclarationListConNVar DeclarationListCon
@@ -138,28 +138,25 @@ AssignOp ::= (AssignOp) ASSIGN;
 
 Expr ::= (ExprList) Expr AddOp Term
          |
-         (ExprT) Term;
+         (ExprT) Term
+         |
+         (MinusExprT) MINUS Term;
 
 Term ::= (TermMulOp) Term MulOp Factor
          |
          (TermF) Factor;
-Factor ::= (Factor) Unary FactorTrue;
 
-Unary ::= (UnarySub) MINUS
-          |
-          (EpsilonU) /* epsilon */;
-
-FactorTrue ::= (FactorTrueDes) Designator
-                |
-			    (FactorTrueMethod) Designator LPAREN RealArgs RPAREN
-		   		|
-		   		(FactorTrueNumber) NUM
-		   		|
-		   		(FactorTrueCharacter) CHAR
-		   		|
-		   		(FactorTrueBool) BOOL
-		   		|
-		   		(FactorTrueNewArr) NEW Type LBRACKET Expr RBRACKET
-		   		|
-		   		(FactorTrueExpr) LPAREN Expr RPAREN
-		   		;
+Factor ::= (FactorDes) Designator
+        |
+        (FactorMethod) Designator LPAREN RealArgs RPAREN
+        |
+        (FactorNumber) NUM
+        |
+        (FactorCharacter) CHAR
+        |
+        (FactorBool) BOOL
+        |
+        (FactorNewArr) NEW Type LBRACKET Expr RBRACKET
+        |
+        (FactorExpr) LPAREN Expr RPAREN
+        ;
