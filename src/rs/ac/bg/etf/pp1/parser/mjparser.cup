@@ -118,7 +118,9 @@ Statement ::= (StatmentDESIG) DesignatorStatment SEMI
               |
               (StetementR) READ LPAREN Designator RPAREN SEMI
               |
-              (StatementP) PRINT LPAREN PrintExpr RPAREN SEMI
+              (StatementPrint) PRINT LPAREN Expr RPAREN SEMI
+              |
+              (SingleStatementPrintExprAndNumber) PRINT LPAREN Expr COMMA NUM RPAREN SEMI
               |
               (StatementDO) DO Statement WHILE LPAREN DoWhileCondition RPAREN SEMI
               |
