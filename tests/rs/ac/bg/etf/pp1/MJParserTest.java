@@ -11,10 +11,15 @@ import java_cup.runtime.Symbol;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
-import rs.ac.bg.etf.pp1.parser.generated.ast.Program;
 import rs.ac.bg.etf.pp1.lexer.generated.Yylex;
 import rs.ac.bg.etf.pp1.parser.generated.Parser;
+import rs.ac.bg.etf.pp1.semantics.SemanticAnalyzer;
 import rs.ac.bg.etf.pp1.util.Log4JUtils;
+
+import rs.ac.bg.etf.pp1.parser.generated.ast.*;
+import rs.etf.pp1.symboltable.*;
+import rs.etf.pp1.symboltable.concepts.Obj;
+import rs.etf.pp1.symboltable.concepts.Struct;
 
 public class MJParserTest {
 
@@ -40,6 +45,27 @@ public class MJParserTest {
 
 			Program prog = (Program) (s.value);
 			log.info(prog.toString(""));
+
+			Tab.init();
+			Struct boolType = new Struct(Struct.Bool);
+			Obj boolObj = Tab.insert(Obj.Type, "bool", boolType);
+			boolObj.setAdr(-1);
+			boolObj.setLevel(-1);
+
+			Struct setType = new Struct(8);
+			setType.setElementType(Tab.intType);
+			Obj setTypeSymbol = Tab.insert(Obj.Type, "set", setType);
+			setTypeSymbol.setAdr(-1);
+			setTypeSymbol.setLevel(-1);
+
+			SemanticAnalyzer sa = new SemanticAnalyzer();
+			prog.traverseBottomUp(sa);
+
+			log.info("=====================================================================");
+			Tab.dump();
+
+
+
 		} finally {
 			if (br != null) {
 				try {

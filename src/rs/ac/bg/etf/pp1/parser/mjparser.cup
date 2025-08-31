@@ -52,11 +52,12 @@ terminal String IDENT;
 nonterminal Program, DeclarationListConNVar, DeclarationListMethods, DeclarationListCon, DeclarationListVar, ConstVal, DeclareConst, DeclareListCon, Type, DeclareVar, DeclareListVar;
 nonterminal ReturnType, ArgumentsAndVarDecl, ListStatements, MethodDeclaration, ArgumentsList, Argument, ArgumentAdd, Statement;
 nonterminal DesignatorStatment, Condition, ElseStatement, Expr, PrintExpr, DoWhileCondition, Designator, AssignOp, RealArgs, SetOp;
-nonterminal Term, Factor, MulOp, AddOp, RelOp, RealArgsList, RealArg, ConditionTerm, ConditionFact, MultipleDeclarationListVar;
+nonterminal Term, Factor, MulOp, AddOp, RelOp, RealArgsList, RealArg, ConditionTerm, ConditionFact, MultipleDeclarationListVar, ProgramName;
 
 precedence left ELSE;
 
-Program ::= (Program) PROGRAM IDENT DeclarationListConNVar LBRACE DeclarationListMethods RBRACE;
+Program ::= (Program) PROGRAM ProgramName DeclarationListConNVar LBRACE DeclarationListMethods RBRACE;
+ProgramName ::= (ProgramName) IDENT;
 DeclarationListConNVar ::= (DeclarationListConNVarC) DeclarationListConNVar DeclarationListCon
                            |
                            (DeclarationListConNVarV) DeclarationListConNVar DeclarationListVar
