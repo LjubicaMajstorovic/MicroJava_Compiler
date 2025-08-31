@@ -80,7 +80,8 @@ import org.apache.log4j.*;
 "union"      { return new_symbol(sym.UNION, yytext()); }
 "do"		{ return new_symbol(sym.DO, yytext()); }
 "while"		{ return new_symbol(sym.WHILE, yytext()); }
-"map"       { return new_symbol(sym.WHILE, yytext()); }
+"map"       { return new_symbol(sym.MAP, yytext()); }
+"main"      { return new_symbol(sym.MAIN, yytext()); }
 
 <YYINITIAL> "//"  { yybegin(COMMENT); }
 <COMMENT> .       { yybegin(COMMENT); }

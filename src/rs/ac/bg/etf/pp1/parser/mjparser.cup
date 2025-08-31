@@ -45,6 +45,7 @@ scan with {:
 
 terminal PROGRAM, BREAK, CONST, ELSE, IF, NEW, PRINT, READ, RETURN, VOID, CONTINUE, FOR, DO, WHILE, MAP, ASSIGN, UNION;
 terminal PLUS, MINUS, ASTERISK, DIVIDE, MODULO, DBL_EQUAL, NOT_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, AND, OR, INC, DEC, SEMI, COLON, COMMA, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
+terminal MAIN;
 terminal Integer NUM, BOOL;
 terminal Character CHAR;
 terminal String IDENT;
@@ -52,11 +53,11 @@ terminal String IDENT;
 nonterminal Program, DeclarationListConNVar, DeclarationListMethods, DeclarationListCon, DeclarationListVar, ConstVal, DeclareConst, DeclareListCon, Type, DeclareVar, DeclareListVar;
 nonterminal ReturnType, ArgumentsAndVarDecl, ListStatements, MethodDeclaration, ArgumentsList, Argument, ArgumentAdd, Statement;
 nonterminal DesignatorStatment, Condition, ElseStatement, Expr, PrintExpr, DoWhileCondition, Designator, AssignOp, RealArgs, SetOp;
-nonterminal Term, Factor, MulOp, AddOp, RelOp, RealArgsList, RealArg, ConditionTerm, ConditionFact, MultipleDeclarationListVar, ProgramName;
+nonterminal Term, Factor, MulOp, AddOp, RelOp, RealArgsList, RealArg, ConditionTerm, ConditionFact, MultipleDeclarationListVar, ProgramName, MainDeclare;
 
 precedence left ELSE;
 
-Program ::= (Program) PROGRAM ProgramName DeclarationListConNVar LBRACE DeclarationListMethods RBRACE;
+Program ::= (Program) PROGRAM ProgramName DeclarationListConNVar LBRACE MethodDeclaration RBRACE;
 ProgramName ::= (ProgramName) IDENT;
 DeclarationListConNVar ::= (DeclarationListConNVarC) DeclarationListConNVar DeclarationListCon
                            |
@@ -87,7 +88,9 @@ Type ::= (Type) IDENT;
 DeclarationListMethods ::= (DeclarationListMethodsAdd) DeclarationListMethods MethodDeclaration
                            |
                            (EpsilonDLM) /* epsilon */;
-MethodDeclaration ::= (MethodDeclaration) ReturnType IDENT ArgumentsAndVarDecl LBRACE ListStatements RBRACE;
+
+MethodDeclaration ::= (MethodDeclaration) MainDeclare MultipleDeclarationListVar LBRACE ListStatements RBRACE;
+MainDeclare ::= (MainDeclare) VOID MAIN LPAREN RPAREN;
 ReturnType ::= (NonVoid) Type
                |
                (Void1) VOID;

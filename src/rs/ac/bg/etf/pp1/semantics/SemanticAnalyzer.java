@@ -14,6 +14,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     private Boolean error = false;
     private Boolean inMain = false;
     private Boolean mainOccured = false;
+    private Obj mainMethod;
 
     private Obj currProgram;
     private int currConstantVal;
@@ -41,10 +42,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(ProgramName programName) {
         currProgram = Tab.insert(Obj.Prog, programName.getI1(), Tab.noType);
         Tab.openScope();
-    }
-    @Override
-    public void visit(Program program) {
-
     }
 
     @Override
@@ -91,7 +88,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 
     @Override
     public void visit(Var var) {
-        Obj variable = null;
+        Obj variable;
         if(inMain) {
             variable = Tab.currentScope().findSymbol(var.getI1());
         } else {
@@ -100,13 +97,13 @@ public class SemanticAnalyzer extends VisitorAdaptor {
         if(variable != Tab.noObj) {
             printError("Ime varijable je vec definisano:" + var.getI1(), var);
         } else {
-            variable = Tab.insert(Obj.Var, var.getI1(), currType);
+            Tab.insert(Obj.Var, var.getI1(), currType);
         }
     }
 
     @Override
     public void visit(Arr array) {
-        Obj variable = null;
+        Obj variable;
         if(inMain) {
             variable = Tab.currentScope().findSymbol(array.getI1());
         } else {
@@ -115,8 +112,34 @@ public class SemanticAnalyzer extends VisitorAdaptor {
         if(variable != Tab.noObj) {
             printError("Ime varijable je vec definisano:" + array.getI1(), array);
         } else {
-            variable = Tab.insert(Obj.Var, array.getI1(), currType);
+            Tab.insert(Obj.Var, array.getI1(), currType);
         }
+    }
+
+    @Override
+    public void visit (MainDeclare main) {
+        mainOccured = true;
+        mainMethod = Tab.insert(Obj.Meth, "main", Tab.noType);
+        inMain = true;
+        Tab.openScope();
+    }
+
+    @Override
+    public void visit (MethodDeclaration main) {
+        Tab.chainLocalSymbols(mainMethod);
+        inMain = false;
+        mainMethod = null;
+        Tab.closeScope();
+    }
+
+    @Override
+    public void visit(Program program) {
+        Tab.chainLocalSymbols(currProgram);
+        Tab.closeScope();
+        currProgram = null;
+
+        if(!mainOccured)
+            printError("Program nije isparavan bez main metode", program);
     }
 
 }
