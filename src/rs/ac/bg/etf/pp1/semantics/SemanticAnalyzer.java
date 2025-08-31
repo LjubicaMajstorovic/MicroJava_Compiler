@@ -91,16 +91,32 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 
     @Override
     public void visit(Var var) {
-
+        Obj variable = null;
+        if(inMain) {
+            variable = Tab.currentScope().findSymbol(var.getI1());
+        } else {
+            variable = Tab.find(var.getI1());
+        }
+        if(variable != Tab.noObj) {
+            printError("Ime varijable je vec definisano:" + var.getI1(), var);
+        } else {
+            variable = Tab.insert(Obj.Var, var.getI1(), currType);
+        }
     }
 
     @Override
     public void visit(Arr array) {
         Obj variable = null;
         if(inMain) {
-
+            variable = Tab.currentScope().findSymbol(array.getI1());
+        } else {
+            variable = Tab.find(array.getI1());
+        }
+        if(variable != Tab.noObj) {
+            printError("Ime varijable je vec definisano:" + array.getI1(), array);
+        } else {
+            variable = Tab.insert(Obj.Var, array.getI1(), currType);
         }
     }
 
-    private boolean doesVariableExist() {}
 }
