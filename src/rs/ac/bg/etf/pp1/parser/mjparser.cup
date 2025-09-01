@@ -123,8 +123,6 @@ Statement ::= (StatmentDESIG) DesignatorStatment SEMI
               |
               (StatementRV) RETURN SEMI
               |
-              (StatementRNV) RETURN Expr SEMI
-              |
               (StetementR) READ LPAREN Designator RPAREN SEMI
               |
               (StatementPrint) PRINT LPAREN Expr RPAREN SEMI
