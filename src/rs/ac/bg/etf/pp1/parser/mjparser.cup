@@ -46,14 +46,18 @@ scan with {:
 terminal PROGRAM, BREAK, CONST, ELSE, IF, NEW, PRINT, READ, RETURN, VOID, CONTINUE, FOR, DO, WHILE, MAP, ASSIGN, UNION;
 terminal PLUS, MINUS, ASTERISK, DIVIDE, MODULO, DBL_EQUAL, NOT_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, AND, OR, INC, DEC, SEMI, COLON, COMMA, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
 terminal MAIN;
+terminal ORD, CHR, ADD, ADDALL;
 terminal Integer NUM, BOOL;
 terminal Character CHAR;
 terminal String IDENT;
 
 nonterminal Program, DeclarationListConNVar, DeclarationListMethods, DeclarationListCon, DeclarationListVar, ConstVal, DeclareConst, DeclareListCon, Type, DeclareVar, DeclareListVar;
 nonterminal ReturnType, ArgumentsAndVarDecl, ListStatements, MethodDeclaration, ArgumentsList, Argument, ArgumentAdd, Statement;
-nonterminal DesignatorStatment, Condition, ElseStatement, Expr, PrintExpr, DoWhileCondition, Designator, AssignOp, RealArgs, SetOp;
-nonterminal Term, Factor, MulOp, AddOp, RelOp, RealArgsList, RealArg, ConditionTerm, ConditionFact, MultipleDeclarationListVar, ProgramName, MainDeclare;
+nonterminal DesignatorStatment, Condition, ElseStatement, PrintExpr, DoWhileCondition, AssignOp, RealArgs, SetOp;
+nonterminal MulOp, AddOp, RelOp, RealArgsList, RealArg, ConditionTerm, ConditionFact, MultipleDeclarationListVar, ProgramName, MainDeclare;
+nonterminal VoidMethodsCall;
+nonterminal rs.etf.pp1.symboltable.concepts.Struct Factor, Term, Expr, NonVoidMethodsCall;
+nonterminal rs.etf.pp1.symboltable.concepts.Obj Designator, ArrayVarName;
 
 precedence left ELSE;
 
@@ -137,14 +141,30 @@ DesignatorStatment ::= (Assign) Designator AssignOp Expr
                        |
                        (MethodCall) Designator LPAREN RealArgs RPAREN
                        |
+                       (VoidMethods) VoidMethodsCall
+                       |
+                       (NonVoidMethods) NonVoidMethodsCall
+                       |
                        (Inc) Designator INC
                        |
                        (Dec) Designator DEC
                        |
                        (SetOperation) Designator AssignOp Designator SetOp Designator;
+
+VoidMethodsCall ::= (AddCall) ADD LPAREN Expr COMMA Expr RPAREN
+                    |
+                    (AddAllCall) ADDALL LPAREN Expr COMMA Expr RPAREN;
+
+NonVoidMethodsCall ::= (ChrCall) CHR LPAREN Expr RPAREN
+                       |
+                       (OrdCall) ORD LPAREN Expr RPAREN;
+
 Designator ::= (Variable) IDENT
                |
-               (ArrayElem) IDENT LBRACKET Expr RBRACKET;
+               (ArrayElem) ArrayVarName LBRACKET Expr RBRACKET;
+
+ArrayVarName ::= (ArrayVarName) IDENT;
+
 AssignOp ::= (AssignOp) ASSIGN;
 
 Expr ::= (ExprList) Expr AddOp Term
@@ -167,10 +187,11 @@ Factor ::= (FactorDes) Designator
         |
         (FactorBool) BOOL
         |
-        (FactorNewArr) NEW Type LBRACKET Expr RBRACKET
+        (FactorNewArrOrSet) NEW Type LBRACKET Expr RBRACKET
         |
         (FactorExpr) LPAREN Expr RPAREN
-        ;
+        |
+        (FactorMethodCall) NonVoidMethodsCall;
 
 AddOp ::= (AddOpPlus) PLUS
           |

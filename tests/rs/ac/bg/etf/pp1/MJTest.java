@@ -27,7 +27,7 @@ public class MJTest {
 		Reader br = null;
 		try {
 			
-			File sourceCode = new File("tests/zvanicni_programi/test302.mj");	
+			File sourceCode = new File("C:\\Users\\core I7\\Desktop\\MicroJava_Compiler\\tests\\zvanicni_programi\\test301.mj");
 			log.info("Compiling source file: " + sourceCode.getAbsolutePath());
 			
 			br = new BufferedReader(new FileReader(sourceCode));

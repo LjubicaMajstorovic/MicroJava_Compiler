@@ -58,6 +58,8 @@ public class MJParserTest {
 			setTypeSymbol.setAdr(-1);
 			setTypeSymbol.setLevel(-1);
 
+			addMissingInitMethods();
+
 			SemanticAnalyzer sa = new SemanticAnalyzer();
 			prog.traverseBottomUp(sa);
 
@@ -76,6 +78,34 @@ public class MJParserTest {
 			}
 		}
 
+	}
+
+	private static void addMissingInitMethods() {
+		Obj add = new Obj(Obj.Meth, "add", Tab.noType, 0, 2);
+		Tab.currentScope().addToLocals(add);
+		{
+			Tab.openScope();
+			Obj set = new Obj(Obj.Var, "set", Tab.find("set").getType(), 0, 1);
+			Obj newInt = new Obj(Obj.Var, "newInt", Tab.intType, 1, 1);
+			Tab.currentScope().addToLocals(set);
+			Tab.currentScope().addToLocals(newInt);
+			add.setLocals(Tab.currentScope().getLocals());
+			Tab.closeScope();
+		}
+
+		Obj addAll = new Obj(Obj.Meth, "addAll", Tab.noType, 0, 2);
+		Tab.currentScope().addToLocals(addAll);
+		{
+			Tab.openScope();
+			Obj set = new Obj(Obj.Var, "set", Tab.find("set").getType(), 0, 1);
+			Struct intArray = new Struct(Struct.Array, Tab.intType);
+			Obj arrayOfNewInts = new Obj(Obj.Var, "arrayOfNewInts", intArray, 1, 1);
+
+			Tab.currentScope().addToLocals(set);
+			Tab.currentScope().addToLocals(arrayOfNewInts);
+			addAll.setLocals(Tab.currentScope().getLocals());
+			Tab.closeScope();
+		}
 	}
 
 }

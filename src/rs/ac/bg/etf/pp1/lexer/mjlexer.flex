@@ -82,6 +82,10 @@ import org.apache.log4j.*;
 "while"		{ return new_symbol(sym.WHILE, yytext()); }
 "map"       { return new_symbol(sym.MAP, yytext()); }
 "main"      { return new_symbol(sym.MAIN, yytext()); }
+"ord"       { return new_symbol(sym.ORD, yytext()); }
+"chr"       { return new_symbol(sym.CHR, yytext()); }
+"add"       { return new_symbol(sym.ADD, yytext()); }
+"addAll"    { return new_symbol(sym.ADDALL, yytext()); }
 
 <YYINITIAL> "//"  { yybegin(COMMENT); }
 <COMMENT> .       { yybegin(COMMENT); }
