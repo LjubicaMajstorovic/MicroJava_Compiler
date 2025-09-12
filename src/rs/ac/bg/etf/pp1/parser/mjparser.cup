@@ -51,13 +51,13 @@ terminal Integer NUM, BOOL;
 terminal Character CHAR;
 terminal String IDENT;
 
-nonterminal Program, DeclarationListConNVar, DeclarationListMethods, DeclarationListCon, DeclarationListVar, ConstVal, DeclareConst, DeclareListCon, Type, DeclareVar, DeclareListVar;
+nonterminal Program, DeclarationListConNVar, DeclarationListMethods, DeclarationListCon, DeclarationListVar, ConstVal, DeclareConst, DeclareListCon, DeclareVar, DeclareListVar;
 nonterminal ReturnType, ArgumentsAndVarDecl, ListStatements, MethodDeclaration, ArgumentsList, Argument, ArgumentAdd, Statement;
 nonterminal DesignatorStatment, Condition, ElseStatement, PrintExpr, DoWhileCondition, AssignOp, RealArgs, SetOp;
-nonterminal MulOp, AddOp, RelOp, RealArgsList, RealArg, ConditionTerm, ConditionFact, MultipleDeclarationListVar, ProgramName, MainDeclare;
+nonterminal MulOp, AddOp, RelOp, RealArgsList, RealArg, ConditionTerm, ConditionFact, MultipleDeclarationListVar, ProgramName;
 nonterminal VoidMethodsCall;
-nonterminal rs.etf.pp1.symboltable.concepts.Struct Factor, Term, Expr, NonVoidMethodsCall;
-nonterminal rs.etf.pp1.symboltable.concepts.Obj Designator, ArrayVarName;
+nonterminal rs.etf.pp1.symboltable.concepts.Struct Factor, Term, Expr, NonVoidMethodsCall, Type;
+nonterminal rs.etf.pp1.symboltable.concepts.Obj Designator, ArrayVarName, MainDeclare;
 
 precedence left ELSE;
 
@@ -131,7 +131,7 @@ Statement ::= (StatmentDESIG) DesignatorStatment SEMI
               |
               (StatementPrint) PRINT LPAREN Expr RPAREN SEMI
               |
-              (SingleStatementPrintExprAndNumber) PRINT LPAREN Expr COMMA NUM RPAREN SEMI
+              (StatementPrintExprAndNumber) PRINT LPAREN Expr COMMA NUM RPAREN SEMI
               |
               (StatementDO) DO Statement WHILE LPAREN DoWhileCondition RPAREN SEMI
               |

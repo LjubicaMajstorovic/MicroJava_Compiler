@@ -1,22 +1,20 @@
 package rs.ac.bg.etf.pp1;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 
 import java_cup.runtime.Symbol;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
+import rs.ac.bg.etf.pp1.codegen.CodeGenerator;
 import rs.ac.bg.etf.pp1.lexer.generated.Yylex;
 import rs.ac.bg.etf.pp1.parser.generated.Parser;
 import rs.ac.bg.etf.pp1.semantics.SemanticAnalyzer;
 import rs.ac.bg.etf.pp1.util.Log4JUtils;
 
 import rs.ac.bg.etf.pp1.parser.generated.ast.*;
+import rs.etf.pp1.mj.runtime.Code;
 import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.Obj;
 import rs.etf.pp1.symboltable.concepts.Struct;
@@ -65,6 +63,23 @@ public class MJParserTest {
 
 			log.info("=====================================================================");
 			Tab.dump();
+
+			if(p.errorDetected || sa.getError() == true) {
+				log.info("Program nije uspesno zavrsen");
+
+			} else {
+				log.info("Uspesno parsiranje i semanticko analiziranje");
+
+				File obj = new File("C:\\Users\\core I7\\Desktop\\MicroJava_Compiler\\tests\\generatedObj\\test301.obj");
+				if(obj.exists()) {
+					obj.delete();
+				}
+				CodeGenerator cg = new CodeGenerator();
+				prog.traverseBottomUp(cg);
+				Code.dataSize = sa.numberOfVars();
+				Code.mainPc = cg.getPcMain();
+				Code.write(new FileOutputStream(obj));
+			}
 
 
 

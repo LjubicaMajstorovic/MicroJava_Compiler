@@ -15,8 +15,8 @@ set s1, s2, s3;
 
 {
 	void main()
-	int temp;
-
+		int bodovi;
+		int temp;
 	{
 		bodovi = 0;
 		bodovi++;
@@ -44,14 +44,13 @@ set s1, s2, s3;
 		print(eol);
 		print(nizch[jedan * 2]); //c
 		print(eol);
+		bodovi = ord('a');
 		print(ord(nizch[0])); //97
-		print(eol);
 
 		a=1;
 		read(bodovi);
 		bodovi = -bodovi + (pet * a / 2 - nula) * bodovi - (3 % 2 + 3 * 2 - 7);
 		print(bodovi); //bodovi
-		print(eol);
 
 		niz[0] = 1; niz[1] = 2; niz[2] = 3;
 		s1 = new set[5]; s2 = new set[5]; s3 = new set[10];
@@ -72,3 +71,5 @@ set s1, s2, s3;
 
 	}
 }
+
+

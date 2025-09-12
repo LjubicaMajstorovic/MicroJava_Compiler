@@ -21,6 +21,13 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     private Struct currConstantType;
     private Struct currType;
 
+    private int numberOfVars;
+
+    public int numberOfVars() {
+        return numberOfVars;
+    }
+
+
     public void printError(String message, SyntaxNode info) {
         error  = true;
         StringBuilder msg = new StringBuilder(message);
@@ -36,6 +43,10 @@ public class SemanticAnalyzer extends VisitorAdaptor {
         if (line != 0)
             msg.append (" na liniji ").append(line);
         log.info(msg.toString());
+    }
+
+    public Boolean getError() {
+        return error;
     }
 
     @Override
@@ -81,9 +92,14 @@ public class SemanticAnalyzer extends VisitorAdaptor {
         if(typeObj == Tab.noObj || typeObj.getKind() != Obj.Type) {
             printError("Nepostojeci tip podataka " + type.getI1(), type);
             currType = Tab.noType;
+            type.struct = Tab.noType;
+
         }
-        else
+        else {
             currType = typeObj.getType();
+            type.struct = currType;
+        }
+
     }
 
     @Override
@@ -120,6 +136,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit (MainDeclare main) {
         mainOccured = true;
         mainMethod = Tab.insert(Obj.Meth, "main", Tab.noType);
+        main.obj = mainMethod;
         inMain = true;
         Tab.openScope();
     }
@@ -134,6 +151,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 
     @Override
     public void visit(Program program) {
+        numberOfVars = Tab.currentScope().getnVars();
         Tab.chainLocalSymbols(currProgram);
         Tab.closeScope();
         currProgram = null;
@@ -268,7 +286,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     }
 
     @Override
-    public void visit(SingleStatementPrintExprAndNumber printer) {
+    public void visit(StatementPrintExprAndNumber printer) {
         Struct type = printer.getExpr().struct;
         printReadExprTypeCheck(type, printer);
     }

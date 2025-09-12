@@ -46,4 +46,32 @@
 			</classpath>
 		</javac>
 	</target>
+
+	<target name="disasm">
+		<java classname="rs.etf.pp1.mj.runtime.disasm">
+			<arg value="tests/generatedObj/test301.obj"/>
+			<classpath>
+				<pathelement location="lib/mj-runtime-1.1.jar"/>
+			</classpath>
+		</java>
+	</target>
+
+	<target name="debugObj" depends="disasm">
+		<java classname="rs.etf.pp1.mj.runtime.Run" input="test/inputs.txt">
+			<arg value="tests/generatedObj/test301.obj"/>
+			<arg value="-debug"/>
+			<classpath>
+				<pathelement location="lib/mj-runtime-1.1.jar"/>
+			</classpath>
+		</java>
+	</target>
+
+	<target name="runObj" depends="debugObj">
+		<java classname="rs.etf.pp1.mj.runtime.Run" input="test/inputs.txt">
+			<arg value="tests/generatedObj/test301.obj"/>
+			<classpath>
+				<pathelement location="lib/mj-runtime-1.1.jar"/>
+			</classpath>
+		</java>
+	</target>
 </project>
