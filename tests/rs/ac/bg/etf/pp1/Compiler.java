@@ -19,7 +19,7 @@ import rs.etf.pp1.symboltable.*;
 import rs.etf.pp1.symboltable.concepts.Obj;
 import rs.etf.pp1.symboltable.concepts.Struct;
 
-public class MJParserTest {
+public class Compiler {
 
 	static {
 		DOMConfigurator.configure("config/log4j.xml");
@@ -28,7 +28,7 @@ public class MJParserTest {
 
 	public static void main(String[] args) throws Exception {
 
-		Logger log = Logger.getLogger(MJParserTest.class);
+		Logger log = Logger.getLogger(Compiler.class);
 
 		Reader br = null;
 		try {

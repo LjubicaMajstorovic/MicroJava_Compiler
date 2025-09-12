@@ -36,6 +36,7 @@
 	<target name="compile" depends="lexer,parser">
 		<javac destdir="bin" includeantruntime="false" debug="true" failonerror="true" fork="true">
 			<src path="src/rs/ac/bg/etf/pp1"/>
+			<src path="tests/rs/ac/bg/etf/pp1"/>
 			<classpath>
 				<pathelement path="lib/JFlex.jar"/>
 				<pathelement path="lib/cup_v10k.jar"/>
