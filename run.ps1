@@ -1,0 +1,1 @@
+java -cp "bin;lib/*" rs.ac.bg.etf.pp1.Ant runObj

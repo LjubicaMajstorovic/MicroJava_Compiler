@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="MicroJavaCompiler" default="compile" basedir=".">
-	<target name="clean">
+	<target name="delete">
 		<delete dir="bin"/>
-		<delete dir="logs"/>
 		<delete dir="src/rs/ac/bg/etf/pp1/lexer/generated/"/>
 		<delete dir="src/rs/ac/bg/etf/pp1/parser/generated/"/>
 
 		<mkdir dir="bin"/>
-		<mkdir dir="logs"/>
 		<mkdir dir="src/rs/ac/bg/etf/pp1/lexer/generated/"/>
 		<mkdir dir="src/rs/ac/bg/etf/pp1/parser/generated/"/>
 	</target>
 
-	<target name="generateLexer" depends="clean">
-		<java jar="lib/JFlex.jar" fork="true" failonerror="true">
+	<target name="lexer" depends="delete">
+		<java jar="lib/JFlex.jar" failonerror="true" fork="true">
 			<arg value="-d"/>
 			<arg value="src/rs/ac/bg/etf/pp1/lexer/generated"/>
 			<arg value="src/rs/ac/bg/etf/pp1/lexer/mjlexer.flex"/>
 		</java>
 	</target>
 
-	<target name="generateParser" depends="generateLexer">
-		<java jar="lib/cup_v10k.jar" dir="src" fork="true" failonerror="true">
+	<target name="parser" depends="lexer">
+		<java jar="lib/cup_v10k.jar" dir="src" failonerror="true" fork="true">
 			<arg value="-destdir"/>
 			<arg value="rs/ac/bg/etf/pp1/parser/generated"/>
 			<arg value="-ast"/>
@@ -35,14 +33,17 @@
 			  tofile="src/rs/ac/bg/etf/pp1/parser/generated/mjparser_astbuild.cup"/>
 	</target>
 
-	<target name="compile" depends="generateLexer,generateParser">
-		<javac destdir="bin" includeantruntime="false" debug="true">
+	<target name="compile" depends="lexer,parser">
+		<javac destdir="bin" includeantruntime="false" debug="true" failonerror="true" fork="true">
 			<src path="src/rs/ac/bg/etf/pp1"/>
-			<src path="tests/rs/ac/bg/etf/pp1"/>
 			<classpath>
 				<pathelement path="lib/JFlex.jar"/>
 				<pathelement path="lib/cup_v10k.jar"/>
 				<pathelement path="lib/log4j-1.2.17.jar"/>
+				<pathelement path="lib/mj-runtime-1.1.jar"/>
+				<pathelement path="lib/symboltable-1-1.jar"/>
+				<pathelement path="lib/ant-launcher.jar"/>
+				<pathelement path="lib/ant.jar"/>
 			</classpath>
 		</javac>
 	</target>
@@ -57,7 +58,7 @@
 	</target>
 
 	<target name="debugObj" depends="disasm">
-		<java classname="rs.etf.pp1.mj.runtime.Run" input="test/inputs.txt">
+		<java classname="rs.etf.pp1.mj.runtime.Run" input="tests/inputs.txt">
 			<arg value="tests/generatedObj/test301.obj"/>
 			<arg value="-debug"/>
 			<classpath>
@@ -67,7 +68,7 @@
 	</target>
 
 	<target name="runObj" depends="debugObj">
-		<java classname="rs.etf.pp1.mj.runtime.Run" input="test/inputs.txt">
+		<java classname="rs.etf.pp1.mj.runtime.Run" input="tests/inputs.txt">
 			<arg value="tests/generatedObj/test301.obj"/>
 			<classpath>
 				<pathelement location="lib/mj-runtime-1.1.jar"/>

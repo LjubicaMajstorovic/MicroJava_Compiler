@@ -6,6 +6,8 @@
       <root url="jar://$PROJECT_DIR$/lib/log4j-1.2.17.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/symboltable-1-1.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/mj-runtime-1.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/ant.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/ant-launcher.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
