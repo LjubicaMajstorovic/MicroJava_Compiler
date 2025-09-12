@@ -70,7 +70,7 @@ public class Compiler {
 			} else {
 				log.info("Uspesno parsiranje i semanticko analiziranje");
 
-				File obj = new File("tests/generatedObj/test301.obj");
+				File obj = new File("tests/program.obj");
 				if(obj.exists()) {
 					obj.delete();
 				}
