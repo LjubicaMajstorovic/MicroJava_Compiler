@@ -86,6 +86,7 @@ import org.apache.log4j.*;
 "chr"       { return new_symbol(sym.CHR, yytext()); }
 "add"       { return new_symbol(sym.ADD, yytext()); }
 "addAll"    { return new_symbol(sym.ADDALL, yytext()); }
+"len"       { return new_symbol(sym.LEN, yytext()); }
 
 <YYINITIAL> "//"  { yybegin(COMMENT); }
 <COMMENT> .       { yybegin(COMMENT); }

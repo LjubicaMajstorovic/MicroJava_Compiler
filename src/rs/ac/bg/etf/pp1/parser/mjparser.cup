@@ -46,7 +46,7 @@ scan with {:
 terminal PROGRAM, BREAK, CONST, ELSE, IF, NEW, PRINT, READ, RETURN, VOID, CONTINUE, FOR, DO, WHILE, MAP, ASSIGN, UNION;
 terminal PLUS, MINUS, ASTERISK, DIVIDE, MODULO, DBL_EQUAL, NOT_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL, AND, OR, INC, DEC, SEMI, COLON, COMMA, LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
 terminal MAIN;
-terminal ORD, CHR, ADD, ADDALL;
+terminal ORD, CHR, ADD, ADDALL, LEN;
 terminal Integer NUM, BOOL;
 terminal Character CHAR;
 terminal String IDENT;
@@ -157,7 +157,10 @@ VoidMethodsCall ::= (AddCall) ADD LPAREN Expr COMMA Expr RPAREN
 
 NonVoidMethodsCall ::= (ChrCall) CHR LPAREN Expr RPAREN
                        |
-                       (OrdCall) ORD LPAREN Expr RPAREN;
+                       (OrdCall) ORD LPAREN Expr RPAREN
+                       |
+                       (LenCall) LEN LPAREN Expr RPAREN;
+
 
 Designator ::= (Variable) IDENT
                |

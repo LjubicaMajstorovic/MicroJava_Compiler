@@ -5,17 +5,18 @@ program test301
 
 {
 	void main()
-		int bodovi;
-		int temp;
-		int c[];
+
+		set c;
+		int a[];
 	{
-	    bodovi = -1;
-	    temp = -2;
-	    c = new int[3];
-	    c[0] = 0;
-	    c[0]--;
-		print(bodovi + temp*3);
-		print(c[0]);
+
+	    c = new set[5];
+	    a = new int[2];
+	    a[0] = 1;
+	    a[1] = 2;
+	    add(c, 5);
+	    addAll(c, a);
+		print(ord('a'));
 
 	}
 }

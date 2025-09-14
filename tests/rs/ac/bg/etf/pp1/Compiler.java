@@ -102,8 +102,12 @@ public class Compiler {
 			Tab.openScope();
 			Obj set = new Obj(Obj.Var, "set", Tab.find("set").getType(), 0, 1);
 			Obj newInt = new Obj(Obj.Var, "newInt", Tab.intType, 1, 1);
+			Obj varSetSize = new Obj(Obj.Var, "size", Tab.intType, 2, 1);
+			Obj varIndex = new Obj(Obj.Var, "index", Tab.intType, 3, 1);
 			Tab.currentScope().addToLocals(set);
 			Tab.currentScope().addToLocals(newInt);
+			Tab.currentScope().addToLocals(varSetSize);
+			Tab.currentScope().addToLocals(varIndex);
 			add.setLocals(Tab.currentScope().getLocals());
 			Tab.closeScope();
 		}
@@ -115,12 +119,17 @@ public class Compiler {
 			Obj set = new Obj(Obj.Var, "set", Tab.find("set").getType(), 0, 1);
 			Struct intArray = new Struct(Struct.Array, Tab.intType);
 			Obj arrayOfNewInts = new Obj(Obj.Var, "arrayOfNewInts", intArray, 1, 1);
-
+			Obj arrayLength = new Obj(Obj.Var, "arrayLength", Tab.intType, 2, 1);
+			Obj varIndex = new Obj(Obj.Var, "index", Tab.intType, 3, 1);
 			Tab.currentScope().addToLocals(set);
 			Tab.currentScope().addToLocals(arrayOfNewInts);
+			Tab.currentScope().addToLocals(arrayLength);
+			Tab.currentScope().addToLocals(varIndex);
 			addAll.setLocals(Tab.currentScope().getLocals());
 			Tab.closeScope();
 		}
+
+
 	}
 
 }

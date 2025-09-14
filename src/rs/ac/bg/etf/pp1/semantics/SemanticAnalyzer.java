@@ -404,6 +404,17 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     }
 
     @Override
+    public void visit(LenCall lenCall) {
+        Struct type = lenCall.getExpr().struct;
+        if (type.getKind() != Struct.Array) {
+            printError("Len funkcija se izvrsvava nad nizovima", lenCall);
+            lenCall.struct = Tab.noType;
+        } else {
+            lenCall.struct = Tab.intType;
+        }
+    }
+
+    @Override
     public void visit(FactorMethodCall factorMethodCall) {
         factorMethodCall.struct = factorMethodCall.getNonVoidMethodsCall().struct;
     }
