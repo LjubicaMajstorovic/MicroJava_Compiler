@@ -129,6 +129,42 @@ public class Compiler {
 			Tab.closeScope();
 		}
 
+		Obj union = new Obj(Obj.Meth, "union", Tab.noType, 0, 3);
+		Tab.currentScope().addToLocals(union);
+		{
+			Tab.openScope();
+			Obj destSet = new Obj(Obj.Var, "destSet", Tab.find("set").getType(), 0, 1);
+			Obj set1 = new Obj(Obj.Var, "set1", Tab.find("set").getType(), 1, 1);
+			Obj set2 = new Obj(Obj.Var, "set2", Tab.find("set").getType(), 2, 1);
+
+			Obj setLength = new Obj(Obj.Var, "setLength", Tab.intType, 3, 1);
+			Obj varIndex = new Obj(Obj.Var, "index", Tab.intType, 4, 1);
+			Tab.currentScope().addToLocals(destSet);
+			Tab.currentScope().addToLocals(set1);
+			Tab.currentScope().addToLocals(set2);
+			Tab.currentScope().addToLocals(setLength);
+			Tab.currentScope().addToLocals(varIndex);
+			union.setLocals(Tab.currentScope().getLocals());
+			Tab.closeScope();
+		}
+
+		Obj printSet = new Obj(Obj.Meth, "printSet", Tab.noType, 0, 3);
+		Tab.currentScope().addToLocals(printSet);
+		{
+			Tab.openScope();
+			Obj set = new Obj(Obj.Var, "set", Tab.find("set").getType(), 0, 1);
+			Obj width = new Obj(Obj.Var, "width", Tab.intType, 1, 1);
+			Obj setLength = new Obj(Obj.Var, "setLength", Tab.intType, 2, 1);
+			Obj varIndex = new Obj(Obj.Var, "index", Tab.intType, 3, 1);
+			Tab.currentScope().addToLocals(set);
+			Tab.currentScope().addToLocals(width);
+			Tab.currentScope().addToLocals(setLength);
+			Tab.currentScope().addToLocals(varIndex);
+			printSet.setLocals(Tab.currentScope().getLocals());
+			Tab.closeScope();
+		}
+
+
 
 	}
 

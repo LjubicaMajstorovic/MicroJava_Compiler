@@ -50,7 +50,7 @@
 	</target>
 
 	<target name="disasm">
-		<java classname="rs.etf.pp1.mj.runtime.disasm">
+		<java classname="rs.etf.pp1.mj.runtime.disasm" fork="true">
 			<arg value="tests/program.obj"/>
 			<classpath>
 				<pathelement location="lib/mj-runtime-1.1.jar"/>
@@ -59,7 +59,7 @@
 	</target>
 
 	<target name="debugObj" depends="disasm">
-		<java classname="rs.etf.pp1.mj.runtime.Run" input="tests/inputs.txt">
+		<java classname="rs.etf.pp1.mj.runtime.Run" input="tests/inputs.txt" fork="true">
 			<arg value="tests/program.obj"/>
 			<arg value="-debug"/>
 			<classpath>
@@ -69,7 +69,7 @@
 	</target>
 
 	<target name="runObj" depends="debugObj">
-		<java classname="rs.etf.pp1.mj.runtime.Run" input="tests/inputs.txt">
+		<java classname="rs.etf.pp1.mj.runtime.Run" input="tests/inputs.txt" fork="true">
 			<arg value="tests/program.obj"/>
 			<classpath>
 				<pathelement location="lib/mj-runtime-1.1.jar"/>

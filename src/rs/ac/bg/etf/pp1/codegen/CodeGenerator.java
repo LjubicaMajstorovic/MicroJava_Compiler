@@ -6,7 +6,6 @@ import rs.etf.pp1.symboltable.Tab;
 import rs.etf.pp1.symboltable.concepts.Obj;
 import rs.etf.pp1.symboltable.concepts.Struct;
 
-import java.util.Iterator;
 
 public class CodeGenerator extends VisitorAdaptor {
 
@@ -22,6 +21,8 @@ public class CodeGenerator extends VisitorAdaptor {
         initOrd();
         initAdd();
         initAddAll();
+        initUnion();
+        initPrintSet();
     }
 
     @Override
@@ -46,6 +47,11 @@ public class CodeGenerator extends VisitorAdaptor {
         Struct exprType = print.getExpr().struct;
         if(exprType == Tab.charType) {
             Code.put(Code.bprint);
+        } else if (exprType == Tab.find("set").getType()) {
+            Obj printSet = Tab.find("printSet");
+            int offset = printSet.getAdr() - Code.pc;
+            Code.put(Code.call);
+            Code.put2(offset);
         } else {
             Code.put(Code.print);
         }
@@ -57,6 +63,11 @@ public class CodeGenerator extends VisitorAdaptor {
         Code.loadConst(print.getN2());
         if(type == Tab.charType) {
             Code.put(Code.bprint);
+        } else if (type == Tab.find("set").getType()) {
+            Obj printSet = Tab.find("printSet");
+            int offset = printSet.getAdr() - Code.pc;
+            Code.put(Code.call);
+            Code.put2(offset);
         } else {
             Code.put(Code.print);
         }
@@ -66,9 +77,9 @@ public class CodeGenerator extends VisitorAdaptor {
     public void visit(StetementR read) {
         Struct type = read.getDesignator().obj.getType();
         if(type == Tab.charType) {
-            Code.put(Code.bprint);
+            Code.put(Code.bread);
         } else {
-            Code.put(Code.print);
+            Code.put(Code.read);
         }
 
         Code.store(read.getDesignator().obj);
@@ -255,10 +266,7 @@ public class CodeGenerator extends VisitorAdaptor {
         int exitAddressIndexLimit = Code.pc - 2;
 
 
-        Code.load(index);
-        Code.loadConst(1);
-        Code.put(Code.add);
-        Code.store(index);
+
 
         Code.load(set);
         Code.load(index);
@@ -266,6 +274,11 @@ public class CodeGenerator extends VisitorAdaptor {
         Code.load(elem);
         Code.putFalseJump(Code.ne, 0);
         int exitAddresElemFound = Code.pc - 2;
+
+        Code.load(index);
+        Code.loadConst(1);
+        Code.put(Code.add);
+        Code.store(index);
 
         Code.putJump(startOfLoop);
         Code.fixup(exitAddressIndexLimit);
@@ -348,6 +361,153 @@ public class CodeGenerator extends VisitorAdaptor {
         Code.put(Code.exit);
         Code.put(Code.return_);
 
+    }
+
+    private void initUnion() {
+        Obj union = Tab.find("union");
+        Obj destSet = null;
+        Obj set1 = null;
+        Obj set2 = null;
+        Obj setLength = null;
+        Obj index = null;
+        for(Obj local: union.getLocalSymbols()) {
+            if (local.getName().equals("destSet")) {
+                destSet = local;
+            } else if (local.getName().equals("set1")) {
+                set1 = local;
+            } else if (local.getName().equals("set2")) {
+                set2 = local;
+            } else if (local.getName().equals("setLength")) {
+                setLength = local;
+            } else if (local.getName().equals("index")) {
+                index = local;
+            }
+        }
+        union.setAdr(Code.pc);
+        Code.put(Code.enter);
+        Code.put(3);
+        Code.put(5);
+        // dodati proveru za kapacitet
+        addSet(destSet, set1, index, setLength);
+        addSet(destSet, set2, index, setLength);
+        Code.put(Code.exit);
+        Code.put(Code.return_);
+    }
+
+
+    private void addSet(Obj set1, Obj set2, Obj index, Obj setLength) {
+        Code.loadConst(1);
+        Code.store(index);
+
+        Code.load(set2);
+        Code.loadConst(0);
+        Code.put(Code.aload);
+        Code.store(setLength);
+
+        int loopStart = Code.pc;
+        Code.load(index);
+        Code.load(setLength);
+        Code.putFalseJump(Code.le, 0);
+        int jumpExitArrayVisited = Code.pc - 2;
+
+        Code.load(set1);
+        Code.load(set2);
+        Code.load(index);
+        Code.put(Code.aload);
+        Obj add = Tab.find("add");
+        int offsetAL = add.getAdr() - Code.pc;
+        Code.put(Code.call);
+        Code.put2(offsetAL);
+
+        Code.load(index);
+        Code.loadConst(1);
+        Code.put(Code.add);
+        Code.store(index);
+
+        Code.putJump(loopStart);
+        Code.fixup(jumpExitArrayVisited);
+    }
+
+    private void initPrintSet() {
+        Obj printSet = Tab.find("printSet");
+        Obj set = null;
+        Obj width = null;
+        Obj setLength = null;
+        Obj index = null;
+        for(Obj local: printSet.getLocalSymbols()) {
+            if (local.getName().equals("set")) {
+                set = local;
+            } else if (local.getName().equals("width")) {
+                width = local;
+            } else if (local.getName().equals("setLength")) {
+                setLength = local;
+            } else if (local.getName().equals("index")) {
+                index = local;
+            }
+        }
+        printSet.setAdr(Code.pc);
+        Code.put(Code.enter);
+        Code.put(2);
+        Code.put(4);
+
+        Code.loadConst(1);
+        Code.store(index);
+
+        Code.load(set);
+        Code.loadConst(0);
+        Code.put(Code.aload);
+        Code.store(setLength);
+
+        Code.loadConst(' ');
+        if (width != null) {
+            Code.load(width);
+        } else {
+            Code.loadConst(0);
+        }
+
+        Code.put(Code.bprint);
+
+        int loopStart = Code.pc;
+
+        Code.load(index);
+        Code.load(setLength);
+        Code.putFalseJump(Code.le, 0);
+        int jumpExitSetVisited = Code.pc - 2;
+
+        Code.load(set);
+        Code.load(index);
+        Code.put(Code.aload);
+        Code.loadConst(0);
+        Code.put(Code.print);
+
+        Code.loadConst(' ');
+        Code.loadConst(0);
+        Code.put(Code.bprint);
+
+        Code.load(index);
+        Code.loadConst(1);
+        Code.put(Code.add);
+        Code.store(index);
+
+        Code.putJump(loopStart);
+        Code.fixup(jumpExitSetVisited);
+
+        Code.put(Code.exit);
+        Code.put(Code.return_);
+    }
+
+    @Override
+    public void visit(SetOperation setOperation) {
+        Obj union = Tab.find("union");
+        Obj destSet = setOperation.getDesignator().obj;
+        Obj set1 = setOperation.getDesignator1().obj;
+        Obj set2 = setOperation.getDesignator2().obj;
+        Code.load(destSet);
+        Code.load(set1);
+        Code.load(set2);
+        int offset = union.getAdr() - Code.pc;
+        Code.put(Code.call);
+        Code.put2(offset);
 
     }
 
